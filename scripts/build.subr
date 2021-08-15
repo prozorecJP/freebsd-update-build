@@ -351,6 +351,8 @@ extractiso () {
 		    tar -xpzf - -C ${WORKDIR}/release/R/trees/src/${C}
 	done
 
+        # this is used for buildworld and buildkernel in jail
+        # ignore doc.txz because it's not necessary for jail
 	log "Constructing world+src image"
 
 	# Create directory for world
@@ -358,8 +360,15 @@ extractiso () {
 
 	# Extract world and source distributions
 	for C in ${WORLDPARTS}; do
-		cat ${WORKDIR}/iso/usr/freebsd-dist/${C}.txz |
-		    tar -xpzf - -C ${WORKDIR}/world/
+                if [ -n ${HOST_ARCH} ]; then
+                        if [ "${C}" != "doc" ]; then
+                                cat ${WORKDIR}/iso/usr/freebsd-dist/${HOST_ARCH}_${C}.txz |
+                                        tar -xpzf - -C ${WORKDIR}/world/
+                        fi
+                else
+                        cat ${WORKDIR}/iso/usr/freebsd-dist/${C}.txz |
+                                tar -xpzf - -C ${WORKDIR}/world/
+                fi
 	done
 	for C in ${SOURCEPARTS}; do
 		cat ${WORKDIR}/iso/usr/freebsd-dist/${C}.txz |
