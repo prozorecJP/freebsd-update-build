@@ -400,6 +400,13 @@ extractworld () {
         # require too much memory
         # mount -t tmpfs tmpfs ${WORKDIR}/$1
 	tar -xpzf ${WORKDIR}/../world.tgz -C ${WORKDIR}/$1
+        if [ -f ${SCRIPTDIR}/${REL}/${TARGET}/src.conf ]; then
+                cp ${SCRIPTDIR}/${REL}/${TARGET}/src.conf ${WORKDIR}/$1/etc/src.conf
+        fi
+        if [ -n "${KERNCONF}" -a -f ${SCRIPTDIR}/${REL}/${TARGET}/${KERNCONF} ];
+ then
+                cp ${SCRIPTDIR}/${REL}/${TARGET}/${KERNCONF} ${WORKDIR}/$1/usr/src/sys/${TARGET}/conf/${KERNCONF}
+        fi
 }
 
 # Apply a list of patches stored in $2 to a world in ${WORKDIR}/$1
