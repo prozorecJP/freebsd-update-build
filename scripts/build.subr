@@ -388,7 +388,8 @@ extractworld () {
 
 	log "Extracting world+src"
 	mkdir -p ${WORKDIR}/$1
-	mount -t tmpfs tmpfs ${WORKDIR}/$1
+        # require too much memory
+        # mount -t tmpfs tmpfs ${WORKDIR}/$1
 	tar -xpzf ${WORKDIR}/../world.tgz -C ${WORKDIR}/$1
 }
 
