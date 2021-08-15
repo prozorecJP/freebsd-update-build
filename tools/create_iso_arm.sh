@@ -33,10 +33,11 @@ egrep "\./usr/lib/debug/boot/.*\.debug" /tmp/list > /tmp/kernel-dbg.list
 egrep "\./usr/lib/debug/.*\.debug" /tmp/list | grep -v "/boot/" > /tmp/base-dbg.list
 egrep -v "\./boot" /tmp/list | egrep -v ".*\.debug$" > /tmp/base.list
 
-for i in base base-dbg kernel kernel-dbg
+sudo -- sh -c "for i in base base-dbg kernel kernel-dbg
 do
-  sudo tar -ncJf ../${DIR}/usr/freebsd-dist/${i}.txz -T /tmp/${i}.list
-done
+  tar -ncJf ../${DIR}/usr/freebsd-dist/\${i}.txz -T /tmp/\${i}.list
+done"
+
 cd ..
 sudo umount /dev/${MD}s2a
 sudo mdconfig -d -u ${MD}
