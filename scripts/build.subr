@@ -1156,3 +1156,27 @@ upload () {
 	# Mark all files prior to now as having been uploaded
 	touch ${PUBDIR}/uploaded
 }
+
+copy () {
+        log "Copying files"
+
+        # Copy files, and make sure the copy was successful
+        tar -cf - --exclude latest.ssl --exclude uploaded       \
+            --newer-mtime-than ${PUBDIR}/uploaded               \
+            -C ${BASEDIR}/pub ${REL}/${TARGET} |
+                tar -xmf - -C ${LOCALDIR}
+        if [ $? -ne 0 ]; then
+                exit 1
+        fi
+
+        # Copy latest.ssl, and make sure the copy was successful
+        tar -cf - -C ${BASEDIR}/pub ${REL}/${TARGET}/latest.ssl |
+                tar -xmf - -C ${LOCALDIR}
+        if [ $? -ne 0 ]; then
+                exit 1
+        fi
+
+        # Mark all files prior to now as having been uploaded
+        touch ${PUBDIR}/uploaded
+}
+
