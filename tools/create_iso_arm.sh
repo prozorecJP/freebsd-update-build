@@ -31,12 +31,16 @@ cd ${ORIG}
 sudo find . -print > ${BASE}
 
 cat > ${MISC} <<EOF
-\.snap
 ^\./home
 ^\./boot/loader.conf
 ^\./boot/msdos
 ^\./etc/fstab
 ^\./etc/rc.conf
+^\./etc/devd.conf
+^\./etc/passwd
+^\./etc/master.passwd
+^\./etc/group
+^\./etc/pwd.db
 ^\./firstboot
 ^\./var/mail/freebsd
 ^\./usr/tests/
