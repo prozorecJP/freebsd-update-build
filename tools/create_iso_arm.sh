@@ -12,6 +12,8 @@ ARCH="arm"
 ISO="FreeBSD-${REL}-RELEASE-${ARCH}-dvd1.iso"
 DIR="iso"
 ORIG="org"
+MISC=/tmp/_misc.exclude
+BASE=/tmp/list
 
 if [ ! -d ${DIR} ]; then
   mkdir ${DIR}
@@ -26,12 +28,27 @@ sudo mount /dev/${MD}s2a ${ORIG}
 rm -f ${ISO}
 mkdir -p ${DIR}/usr/freebsd-dist/
 cd ${ORIG}
-sudo find . -print > /tmp/list
+sudo find . -print > ${BASE}
 
-egrep "\./boot" /tmp/list > /tmp/kernel.list
-egrep "\./usr/lib/debug/boot/.*\.debug" /tmp/list > /tmp/kernel-dbg.list
-egrep "\./usr/lib/debug/.*\.debug" /tmp/list | grep -v "/boot/" > /tmp/base-dbg.list
-egrep -v "\./boot" /tmp/list | egrep -v ".*\.debug$" > /tmp/base.list
+cat > ${MISC} <<EOF
+\.snap
+^\./home
+^\./boot/loader.conf
+^\./boot/msdos
+^\./etc/fstab
+^\./etc/rc.conf
+^\./firstboot
+^\./var/mail/freebsd
+^\./usr/tests/
+^\./usr/lib/debug/
+EOF
+
+egrep "^\./boot/(dtb|kernel)" ${BASE} > /tmp/kernel.list
+egrep "^\./usr/lib/debug/boot/kernel/.*debug$" ${BASE} > /tmp/kernel-dbg.list
+egrep "^\./usr/lib/debug/(bin|lib|libexec|sbin|usr)/.*debug$" ${BASE} > /tmp/base-dbg.list
+fgrep -v -f /tmp/kernel.list ${BASE} | fgrep -v -f /tmp/kernel-dbg.list | fgrep -v -f /tmp/base-dbg.list | egrep -v -f ${MISC} > /tmp/base.list
+
+rm -f ${MISC}
 
 sudo -- sh -c "for i in base base-dbg kernel kernel-dbg
 do
