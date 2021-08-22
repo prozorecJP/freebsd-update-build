@@ -8,12 +8,19 @@ Since the tool uses installation DVD ISO image, but there isn’t a such one for
 
 ## Download necessary files
 The tool uses files on DVD ISO image and the files are
+
+| name | purpose |
+-------|--------
 | base.txz | target architecture |
 | base-dbg.txz |  target architecture |
 | kernel.txz | target architecture |
 | kernel-dbg.txz | target architecture |
 | src.txz | target architecture |
+
 Moreover we need base.txz for host architecture and this file is used to setup jail environment for build the system. The file is renamed to be able to identify the host architecture.
+
+| name | purpose |
+-------|--------
 | amd64_base.txz | host architecture |
 | amd64_base-dbg.txz | host architecture |
 
@@ -22,11 +29,17 @@ Probably amd64_base-dbg.txz isn’t used during building but this is downloaded 
 FreeBSD doesn’t release  base.txz, kernel.txz, base-dbg.txz and kernel-dbg.txz for arm, so that these files are created from SD card image. This approach isn’t sophisticated and is rather tricky. Anyway SD card image is downloaded for arm.
 
 There are 2 shell script to download all necessary files to remote machine.
+
+| name | purpose |
+-------|--------
 | download_arm.sh | arm |
 | download_arm64.sh | arm64 (aarch64) |
 
 ## Create pseudo DVD ISO image
 Once all necessary files are available on local machine, we just need to pack them into DVD ISO image. There 2 script for this purpose.
+
+| name | purpose |
+-------|--------
 | create_iso_arm.sh | arm |
 | create_iso_arm64.sh | arm64 (aarch64) |
 
